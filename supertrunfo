@@ -1,1 +1,143 @@
+#include <stdio.h>
 
+typedef struct {
+    char nome[30];
+    int forca;
+    int velocidade;
+    int inteligencia;
+} Carta;
+
+void mostrarCarta(Carta c) {
+    printf("Carta: %s\n", c.nome);
+    printf("Força: %d\n", c.forca);
+    printf("Velocidade: %d\n", c.velocidade);
+    printf("Inteligência: %d\n", c.inteligencia);
+}
+
+void compararSimples(Carta c1, Carta c2) {
+    int escolha;
+    printf("Escolha o atributo para comparação:\n");
+    printf("1 - Força\n2 - Velocidade\n3 - Inteligência\n> ");
+    scanf("%d", &escolha);
+
+    switch(escolha) {
+        case 1:
+            if (c1.forca > c2.forca)
+                printf("%s venceu!\n", c1.nome);
+            else if (c1.forca < c2.forca)
+                printf("%s venceu!\n", c2.nome);
+            else
+                printf("Empate!\n");
+            break;
+        case 2:
+            if (c1.velocidade > c2.velocidade)
+                printf("%s venceu!\n", c1.nome);
+            else if (c1.velocidade < c2.velocidade)
+                printf("%s venceu!\n", c2.nome);
+            else
+                printf("Empate!\n");
+            break;
+        case 3:
+            if (c1.inteligencia > c2.inteligencia)
+                printf("%s venceu!\n", c1.nome);
+            else if (c1.inteligencia < c2.inteligencia)
+                printf("%s venceu!\n", c2.nome);
+            else
+                printf("Empate!\n");
+            break;
+        default:
+            printf("Opção inválida.\n");
+    }
+}
+
+void compararMultiplos(Carta c1, Carta c2) {
+    int pontos1 = 0, pontos2 = 0;
+
+    // Compara força
+    if (c1.forca > c2.forca) pontos1++;
+    else if (c2.forca > c1.forca) pontos2++;
+
+    // Compara velocidade
+    if (c1.velocidade > c2.velocidade) pontos1++;
+    else if (c2.velocidade > c1.velocidade) pontos2++;
+
+    // Compara inteligência
+    if (c1.inteligencia > c2.inteligencia) pontos1++;
+    else if (c2.inteligencia > c1.inteligencia) pontos2++;
+
+    if (pontos1 > pontos2)
+        printf("%s venceu com %d atributos contra %d.\n", c1.nome, pontos1, pontos2);
+    else if (pontos2 > pontos1)
+        printf("%s venceu com %d atributos contra %d.\n", c2.nome, pontos2, pontos1);
+    else
+        printf("Empate!\n");
+}
+
+void compararDoisAtributos(Carta c1, Carta c2) {
+    int atr1, atr2;
+    int vitorias1 = 0, vitorias2 = 0;
+
+    printf("Escolha dois atributos para comparar:\n");
+    printf("1 - Força\n2 - Velocidade\n3 - Inteligência\n");
+
+    printf("Primeiro atributo: ");
+    scanf("%d", &atr1);
+    printf("Segundo atributo: ");
+    scanf("%d", &atr2);
+
+    // Função de comparação simples com operador ternário
+    int valor1_attr1 = (atr1 == 1) ? c1.forca : (atr1 == 2) ? c1.velocidade : c1.inteligencia;
+    int valor2_attr1 = (atr1 == 1) ? c2.forca : (atr1 == 2) ? c2.velocidade : c2.inteligencia;
+
+    int valor1_attr2 = (atr2 == 1) ? c1.forca : (atr2 == 2) ? c1.velocidade : c1.inteligencia;
+    int valor2_attr2 = (atr2 == 1) ? c2.forca : (atr2 == 2) ? c2.velocidade : c2.inteligencia;
+
+    vitorias1 += (valor1_attr1 > valor2_attr1) ? 1 : (valor1_attr1 < valor2_attr1) ? 0 : 0;
+    vitorias2 += (valor2_attr1 > valor1_attr1) ? 1 : (valor2_attr1 < valor1_attr1) ? 0 : 0;
+
+    vitorias1 += (valor1_attr2 > valor2_attr2) ? 1 : (valor1_attr2 < valor2_attr2) ? 0 : 0;
+    vitorias2 += (valor2_attr2 > valor1_attr2) ? 1 : (valor2_attr2 < valor1_attr2) ? 0 : 0;
+
+    if (vitorias1 > vitorias2)
+        printf("%s venceu!\n", c1.nome);
+    else if (vitorias2 > vitorias1)
+        printf("%s venceu!\n", c2.nome);
+    else
+        printf("Empate!\n");
+}
+
+int main() {
+    Carta jogador1 = {"Dragão Vermelho", 90, 70, 60};
+    Carta jogador2 = {"Fênix Azul", 80, 85, 65};
+
+    int opcao;
+
+    printf("==== SUPER TRUNFO ====\n");
+    mostrarCarta(jogador1);
+    printf("\nVS\n\n");
+    mostrarCarta(jogador2);
+    printf("\n");
+
+    printf("Escolha o tipo de comparação:\n");
+    printf("1 - Comparação simples (1 atributo)\n");
+    printf("2 - Comparação múltipla (todos atributos)\n");
+    printf("3 - Comparação com 2 atributos (operador ternário)\n");
+    printf("> ");
+    scanf("%d", &opcao);
+
+    switch(opcao) {
+        case 1:
+            compararSimples(jogador1, jogador2);
+            break;
+        case 2:
+            compararMultiplos(jogador1, jogador2);
+            break;
+        case 3:
+            compararDoisAtributos(jogador1, jogador2);
+            break;
+        default:
+            printf("Opção inválida.\n");
+    }
+
+    return 0;
+}
